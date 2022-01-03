@@ -21,7 +21,7 @@ repositories {
     mavenCentral()
 }
 dependencies {
-    implementation 'org.lsposed.hiddenapibypass:hiddenapibypass:3.0'
+    implementation 'org.lsposed.hiddenapibypass:hiddenapibypass:4.1'
 }
 ```
 
@@ -35,10 +35,25 @@ dependencies {
     ```java
     Object instance = HiddenApiBypass.newInstance(Class.forName("android.app.IActivityManager$Default")/*, args*/);
     ```
-1. Get all methods including restrcted ones from a class:
+1. Get all methods including restricted ones from a class:
     ```java
     var allMethods = HiddenApiBypass.getDeclaredMethods(ApplicationInfo.class);
     ((Method).stream(allMethods).filter(e -> e.getName().equals("usesNonSdkApi")).findFirst().get()).invoke(new ApplicationInfo());
+    ```
+1. Get all non-static fields including restricted ones from a class:
+    ```java
+    var allInstanceFields = HiddenApiBypass.getInstanceFields(ApplicationInfo.class);
+    ((Method).stream(allInstanceFields).filter(e -> e.getName().equals("longVersionCode")).findFirst().get()).get(new ApplicationInfo());
+    ```
+1. Get all static fields including restricted ones from a class:
+    ```java
+    var allStaticFields = HiddenApiBypass.getStaticFields(ApplicationInfo.class);
+    ((Method).stream(allInstanceFields).filter(e -> e.getName().equals("HIDDEN_API_ENFORCEMENT_DEFAULT")).findFirst().get()).get(null);
+    ```
+1. Get specific class method or class constructor
+    ```java
+    var ctor = HiddenApiBypass.getDeclaredConstructor(ClipDrawable.class /*, args */);
+    var method = HiddenApiBypass.getDeclaredMethod(ApplicationInfo.class, "getHiddenApiEnforcementPolicy" /*, args */);
     ```
 1. Add a class to exemption list:
     ```java
