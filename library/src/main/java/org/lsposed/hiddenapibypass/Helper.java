@@ -20,6 +20,7 @@ import java.lang.invoke.MethodHandleInfo;
 import java.lang.invoke.MethodType;
 import java.lang.reflect.Member;
 
+@SuppressWarnings("unused")
 public class Helper {
     static public class MethodHandle {
         private final MethodType type = null;
@@ -68,8 +69,40 @@ public class Helper {
         private transient short copiedMethodsOffset;
         private transient short virtualMethodsOffset;
     }
+
+    static public class AccessibleObject {
+        boolean override;
+    }
+
+    static final public class Executable extends AccessibleObject {
+        private Class declaringClass;
+        private Class declaringClassOfOverriddenMethod;
+        private Object[] parameters;
+        private long artMethod;
+        private int accessFlags;
+    }
+
+    @SuppressWarnings("EmptyMethod")
     public static class NeverCall {
-        static void a(){}
-        static void b(){}
+        static void a() {
+        }
+
+        static void b() {
+        }
+
+        static int s;
+        static int t;
+        int i;
+        int j;
+    }
+
+    public static class InvokeStub {
+        static Object invoke(Object... args) {
+            throw new IllegalStateException("Failed to invoke the method");
+        }
+
+        InvokeStub(Object... args) {
+            throw new IllegalStateException("Failed to new a instance");
+        }
     }
 }
